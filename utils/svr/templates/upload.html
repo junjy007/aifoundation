@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Image</title>
+</head>
+<body>
+<form method="POST" enctype="multipart/form-data"
+      action="{{ url_for('upload') }}">
+    <input type="file" name="photo">
+    <input type="submit" name="action" value="detect">
+    <input type="submit" name="action" value="style_vangogh">
+</form>
+
+</body>
+</html>

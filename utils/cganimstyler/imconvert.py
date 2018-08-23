@@ -8,7 +8,7 @@ import torchvision.transforms as transforms
 from .resnet import ResnetGenerator
 
 image_transform = transforms.Compose([
-            transforms.Resize([256, 256], Image.BICUBIC),
+            transforms.Resize(256, Image.BICUBIC),
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5),
                                  (0.5, 0.5, 0.5))])
@@ -39,7 +39,8 @@ def __patch_instance_norm_state_dict(state_dict, module, keys, i=0):
            (key == 'num_batches_tracked'):
             state_dict.pop('.'.join(keys))
     else:
-        __patch_instance_norm_state_dict(state_dict, getattr(module, key), keys, i + 1)
+        __patch_instance_norm_state_dict(
+            state_dict, getattr(module, key), keys, i + 1)
 
 def load_generator_from(model_path):
     norm_layer = functools.partial(nn.InstanceNorm2d, affine=False,
@@ -48,7 +49,7 @@ def load_generator_from(model_path):
                            n_blocks=9)
     state_dict = torch.load(model_path)
     for key in list(
-            state_dict.keys()):  # need to copy keys here because we mutate in loop
+            state_dict.keys()):  # need to copy keys because we mutate in loop
         __patch_instance_norm_state_dict(state_dict, netG, key.split('.'))
     netG.load_state_dict(state_dict)
     return netG
