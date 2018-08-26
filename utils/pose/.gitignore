@@ -1,0 +1,8 @@
+
+*.jpg
+
+*.pth
+
+.idea/
+.ipynb_checkpoints/
+.checkpoints/
