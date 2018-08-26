@@ -22,11 +22,13 @@ def upload():
         action = request.form['action']
         # TODO! RISK of exposing parent directories
         fullfname = os.path.join(imdir, filename)
+        print(fullfname)
         try:
             action_callback = upload_callbacks.get(action)
             action_callback(fullfname)
-        except:
+        except Exception as e:
             print("Action failed.")
+            print(e)
             pass
     return render_template('upload.html')
 

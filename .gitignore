@@ -4,4 +4,6 @@
 /ref/previous_projects/
 __pycache__
 *.pyc
+*.swp
+commitmessage.txt
 

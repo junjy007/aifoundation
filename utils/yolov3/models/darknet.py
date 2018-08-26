@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 DEBUG_CONSTRUCTION = False
-DEBUG_DARKNET_FORWARD = False
+DEBUG_DARKNET_FORWARD = True
 DEBUG_DARKNET_LOADRAW = False
 
 def parse_cfg(cfgfile):
@@ -213,7 +213,8 @@ def create_modules(blocks):
 
     return net_info, module_list
 
-def predict_transform(pred, input_dim, anchors, num_classes):
+def predict_transform(pred, input_dim, anchors, num_classes, 
+                      device=torch.device('cpu')):
     """
     The output of YOLO is a convolutional feature map that
     contains the bounding box attributes along the depth of the
@@ -235,6 +236,7 @@ def predict_transform(pred, input_dim, anchors, num_classes):
     :param input_dim: input dimension (it is a square)
     :param anchors: the anchor boxes
     :param num_classes:
+    :param device:
     """
 
     batch_size = pred.size(0)
@@ -285,19 +287,22 @@ def predict_transform(pred, input_dim, anchors, num_classes):
     grid = np.arange(grid_size)
     a, b = np.meshgrid(grid, grid)
 
-    x_offset = torch.FloatTensor(a).view(-1, 1)
-    y_offset = torch.FloatTensor(b).view(-1, 1)
+    x_offset = torch.FloatTensor(a).view(-1, 1).to(device)
+    y_offset = torch.FloatTensor(b).view(-1, 1).to(device)
+    print("xy-offset done")
     x_y_offset = torch.cat(
         (x_offset, y_offset), 1).repeat(1, num_anchors)
     x_y_offset = x_y_offset.view(-1, 2).unsqueeze(0)
     pred[:, :, :2] += x_y_offset
+    print("xy-offset applied")
     #print(pred[0, ::10, :2])
     #print(x_y_offset[0, ::10])
 
     # log space transform height and the width
-    anchors = torch.FloatTensor(anchors)
+    anchors = torch.FloatTensor(anchors).to(device)
     anchors = anchors.repeat(grid_size * grid_size, 1).unsqueeze(0)
     pred[:, :, 2:4] = torch.exp(pred[:, :, 2:4]) * anchors
+    print("anchor boxes computed")
 
     pred[:, :, 5:5 + num_classes] = \
         torch.sigmoid((pred[:, :, 5:5 + num_classes]))
@@ -382,11 +387,14 @@ def write_results(pred, confid_threshold, nms_conf=0.4):
 
 
 class Darknet(nn.Module):
-    def __init__(self, cfgfile):
+    def __init__(self, cfgfile, device=torch.device('cpu')):
         super(Darknet, self).__init__()
         self.mod_specs = parse_cfg(cfgfile)
         self.net_info, self.module_list = create_modules(self.mod_specs)
         self.mod_specs = self.mod_specs[1:]  # 1st element is netinfo
+        self.device = device # !!! only to be used for predict_transform
+        # TODO:
+        # it is better to load the parameters BEFORE send everything to GPU
 
     def forward(self, x, save_layers=[], save_prefix=""):
         is_first_yolo_layer = True
@@ -424,9 +432,8 @@ class Darknet(nn.Module):
                 num_classes = int(spec['classes'])
 
                 # Transform
-                x = predict_transform(x, input_dim,
-                                      anchors,
-                                      num_classes)
+                x = predict_transform(x, input_dim, anchors,
+                                      num_classes, self.device)
                 if is_first_yolo_layer:
                     total_detections = x
                 else:

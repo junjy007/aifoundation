@@ -28,7 +28,11 @@ def get_trained_model_parameters(style, modeldir):
 
 # build the style model
 class CGANMod:
-    def __init__(self, target_style=TARGET_STYLE):
+    def __init__(self, global_args, target_style=TARGET_STYLE):
+        """
+        :param global_args: global setting of the service
+        """
+        self.device = global_args.device
         self.pwd_ = os.path.dirname(os.path.abspath(__file__))
         self.target_style = target_style
         # noinspection PyPep8
@@ -37,6 +41,8 @@ class CGANMod:
             target_style,
             fpth("saved_style_models"))
         self.netG = load_generator_from(self.model_path)
+        self.netG.to(global_args.device)
+        self.netG.eval()
         return
 
     def process(self, im):
@@ -46,7 +52,7 @@ class CGANMod:
         :return:
         """
         original_r = float(im.size[0]) / im.size[1]
-        im_t = image_transform(im).unsqueeze(0)
+        im_t = image_transform(im).unsqueeze(0).to(self.device)
         res = self.netG(im_t)
         outim = tensor2im(res)
         return outim
