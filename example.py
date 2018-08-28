@@ -43,6 +43,7 @@ def pose_proc(fname):
     outim = mods['pose'].process(im)
     viz.image(outim.transpose([2, 0, 1]),
               opts=dict(title='POSE', caption=fname))
+    return outim
 
 
 def yolo_proc(fname):
@@ -50,6 +51,7 @@ def yolo_proc(fname):
     outim = mods['yolo'].process(im)
     viz.image(outim.transpose([2, 0, 1]),
               opts=dict(title='YOLO', caption=fname))
+    return outim
 
 
 def cgan_proc(fname):
@@ -59,6 +61,7 @@ def cgan_proc(fname):
     print("Processed ")
     viz.image(outim.transpose([2, 0, 1]),
               opts=dict(title=mods['cgan'].target_style, caption=fname))
+    return outim
 
 
 app.upload_callbacks = dict(detect=yolo_proc,

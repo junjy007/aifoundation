@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr" itemscope itemtype="http://schema.org/Article">
+
+<head>
+    <meta charset="utf-8">
+    <meta property="twitter:account_id" content="1593210261"/>
+    <title>深度学习</title>
+    <meta name="description" content="How to capture audio and video using the navigator.getUserMedia() API.">
+    <meta name="keywords"
+          content="html5,html 5,html5 demos,html5 examples,javascript,css3,notifications,geolocation,web workers,apppcache,file api,filereader,indexeddb,offline,audio,video,drag and drop,chrome,sse,mobile">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="theme-color" content="#f04530">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/rss+xml" title="HTML5 Rocks RSS"
+          href="http://feeds.feedburner.com/html5rocks">
+    <meta name="google-site-verification" content="E1HOIDkksrWY5npenL8FeQhKn4Ujctd75iO2lfufSyA"/>
+    <meta itemprop="name" content="Capturing Audio &amp; Video in HTML5 - HTML5 Rocks">
+    <meta itemprop="description" content="How to capture audio and video using the navigator.getUserMedia() API.">
+
+    <meta itemprop="image" content="https://www.html5rocks.com/static/images/html5rocks-logo-wings.png">
+
+    <link rel="canonical" href="https://developers.google.com/web/fundamentals/native-hardware/capturing-images/">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@ChromiumDev">
+    <meta name="twitter:creator" content="@ebidel">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Capturing Audio &amp; Video in HTML5 - HTML5 Rocks">
+    <meta property="og:url" content="https://www.html5rocks.com/en/tutorials/getusermedia/intro/">
+    <meta property="og:description" content="How to capture audio and video using the navigator.getUserMedia() API.">
+    <meta property="og:image" content="https://www.html5rocks.com/static/images/profiles/ericbidelman.png">
+    <meta property="og:site_name" content="HTML5 Rocks - A resource for open web HTML5 developers">
+
+
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,800|Source+Code+Pro" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css"/>
+
+</head>
+
+<body data-href="tutorials-getusermedia-intro" onload="" class="article tutorial">
+<img src="/static/images/dli.jpg" width="400px" height="200px"/>
+<div class="body-content">
+
+    <article class="content-wrapper">
+
+        <section class="container">
+
+            <div class="content" id="article-content">
+
+                <div id="screenshot" style="text-align:center;">
+                    <div id="one" class="chuang">
+                        <video class="videostream" autoplay></video>
+                    </div>
+                    <div id="two" class="chuang">
+
+                    </div>
+
+                    <div id="three" class="chuang"><img id="screenshot-img">可拖拽图片</div>
+                    <div id="four" class="chuang">
+
+                    </div>
+                    <div id="five">
+                        <p>
+                            <button class="capture-button">开启摄像</button>
+                        </p>
+                        <p>
+                            <button id="screenshot-button" disabled>捕获图像</button>
+                        </p>
+                        <p>
+                            <button onclick="upload()">上传</button>
+                        </p>
+                    </div>
+                    <div class="dropDownList">
+                        <div id="dropDownList1" class="dropdown">
+                            <select id="model" style="display: none;">
+                                <option>MNIST</option>
+                                <option selected="selected">openpose</option>
+                                <option>UNIT(city2gta)</option>
+                                <option>UNIT(gta2city)</option>
+                                <option>yolo3</option>
+                                <option>ToStyle(night)</option>
+                                <option>ToStyle(mosaic)</option>
+                                <option>ToStyle(udnie)</option>
+                                <option>ToStyle(candy)</option>
+                            </select>
+                            <span>请选择</span>
+                            <ul></ul>
+                        </div>
+
+                    </div>
+                </div>
+                <script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
+                <script type="text/javascript" src="/static/js/index.js"></script>
+
+            </div>
+        </section>
+    </article>
+</div>
+</body>
+</html>
